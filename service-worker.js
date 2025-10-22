@@ -1,4 +1,4 @@
-const CACHE_NAME = "mente-codigo-cache-v1";
+const CACHE_NAME = "mente-codigo-cache-v2";
 const urlsToCache = [
   "./",
   "./index.html",
