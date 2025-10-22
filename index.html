@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>CAOS — Edición Especial: Mente y Código (2025)</title>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink:#000;
+      --paper:#fff;
+      --shadow:8px 8px 0 var(--ink);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:'Rock Salt',cursive;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding:20px;
+    }
+
+    .panel{
+      background:var(--paper);
+      border:3px solid var(--ink);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+      max-width:500px;
+      width:100%;
+      text-align:center;
+    }
+
+    .titulo{
+      font-size:clamp(22px,5vw,30px);
+      border:3px dashed var(--ink);
+      border-radius:14px;
+      padding:10px 12px;
+      background:var(--paper);
+      margin-bottom:14px;
+    }
+
+    .carta-wrap{
+      perspective:1200px;
+      width:100%;
+      max-width:380px;
+      margin:auto;
+    }
+
+    .carta{
+      width:100%;
+      aspect-ratio:3/4.2;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 0.9s cubic-bezier(.4,.2,.3,1.2);
+      cursor:pointer;
+      border-radius:var(--radius);
+    }
+    .carta.is-flipped{
+      transform:rotateY(180deg);
+    }
+
+    .cara{
+      position:absolute;
+      inset:0;
+      border:3px solid var(--ink);
+      border-radius:var(--radius);
+      background:var(--paper);
+      box-shadow:var(--shadow);
+      backface-visibility:hidden;
+      overflow:hidden;
+    }
+
+    .cara img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .cara.back{
+      transform:rotateY(180deg);
+    }
+
+    .nota{
+      font-family:'Comic Neue',sans-serif;
+      font-size:14px;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .btn{
+      display:inline-block;
+      margin-top:14px;
+      background:var(--paper);
+      border:2px dashed var(--ink);
+      box-shadow:3px 3px 0 var(--ink);
+      border-radius:12px;
+      padding:10px 16px;
+      font-family:'Comic Neue',sans-serif;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform 0.15s;
+    }
+    .btn:hover{ transform:scale(1.05); }
+
+    .dedicatoria{
+      font-family:'Comic Neue',sans-serif;
+      font-size:clamp(15px,4vw,18px);
+      font-weight:700;
+      margin-top:20px;
+      border:3px solid var(--ink);
+      border-radius:14px;
+      box-shadow:4px 4px 0 var(--ink);
+      padding:0 12px;
+      background:var(--paper);
+      line-height:1.4;
+      overflow:hidden;
+      max-height:0;
+      transition:max-height 1.4s ease, padding 1.4s ease;
+    }
+    .dedicatoria.mostrar{
+      max-height:500px;
+      padding:12px;
+    }
+
+    footer{
+      font-family:'Comic Neue',sans-serif;
+      font-size:12px;
+      font-weight:700;
+      margin-top:18px;
+      opacity:0.8;
+      text-align:center;
+    }
+
+    @media (min-width:768px){
+      body{padding:40px;}
+      .panel{max-width:520px;}
+    }
+  </style>
+</head>
+<body>
+
+  <main class="panel">
+    <h1 class="titulo">CAOS — Edición Especial<br>Mente y Código (2025)</h1>
+
+    <div class="carta-wrap" id="flipCard">
+      <div class="carta">
+        <div class="cara front">
+          <img src="frente.png" alt="Carta Mente y Código">
+        </div>
+        <div class="cara back">
+          <img src="contracara.png" alt="Contracara CAOS 2025">
+        </div>
+      </div>
+    </div>
+
+    <div class="nota">✨ Toca o haz clic para ver la carta por ambos lados.</div>
+
+    <button class="btn" id="mostrarMensaje">💬 Ver mensaje</button>
+
+    <div class="dedicatoria" id="dedicatoria">
+      Profe Salvador:
+<br><br>
+Gracias por presentarme este proyecto y por incluirme en él.
+Más allá de la programación o las cartas, me enseñó lo que significa creer en una idea y llevarla a cabo con pasión.
+Admiro profundamente la forma en que enseña, no solo por su conocimiento, sino por los valores que transmite, su paciencia, y la manera en que logra ver el potencial en cada uno de nosotros.
+<br><br>
+Usted es una de esas personas que marcan una diferencia real — no solo en el aula, sino en la vida de quienes tenemos la suerte de aprender con usted.
+Gracias por confiar, por inspirar y por ser un ejemplo a seguir.
+<br><br>
+— Benjamín González 🧠💻
+    </div>
+  </main>
+
+  <footer>© 2025 CAOS</footer>
+
+  <script>
+    const carta = document.querySelector('.carta');
+    const dedicatoria = document.getElementById('dedicatoria');
+    const botonMensaje = document.getElementById('mostrarMensaje');
+
+    // Girar carta
+    function toggleFlip() {
+      carta.classList.toggle('is-flipped');
+    }
+
+    // Mostrar / ocultar dedicatoria
+    botonMensaje.addEventListener('click', () => {
+      dedicatoria.classList.toggle('mostrar');
+      botonMensaje.textContent = dedicatoria.classList.contains('mostrar')
+        ? "💬 Ocultar mensaje"
+        : "💬 Ver mensaje";
+    });
+
+    document.getElementById('flipCard').addEventListener('click', toggleFlip);
+    document.getElementById('flipCard').addEventListener('touchstart', toggleFlip);
+  </script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("✅ Service Worker registrado"))
+      .catch(err => console.log("❌ Error al registrar SW:", err));
+  }
+</script>
+
+</body>
+</html>
