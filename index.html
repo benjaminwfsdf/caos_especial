@@ -52,7 +52,7 @@
       align-items:center;
       justify-content:center;
       background:#fff;
-      transition:opacity .35s ease, visibility .35s ease;
+      transition:opacity .8s ease;
     }
     #splash.is-hidden {
       opacity:0;
@@ -289,34 +289,36 @@
     document.getElementById('flipCard').addEventListener('touchstart', toggleFlip);
 
     /* ===== Splash control ===== */
-    (function(){
-      const splash = document.getElementById('splash');
-      const SPLASH_MIN_MS = 1200;
-      const SPLASH_MAX_MS = 2000;
+    document.addEventListener("DOMContentLoaded", () => {
+      const splash = document.getElementById("splash");
+      if (!splash) return;
+
+      const MIN_TIME = 1500;
+      const MAX_TIME = 4000;
       const start = performance.now();
-      let hidden = false;
+
       const hideSplash = () => {
-        if (hidden || !splash) return;
-        hidden = true;
-        splash.classList.add('is-hidden');
-        setTimeout(() => splash.remove(), 500);
+        splash.classList.add("is-hidden");
+        setTimeout(() => splash.remove(), 800);
       };
-      const scheduleHideRespectingMin = () => {
+
+      const finish = () => {
         const elapsed = performance.now() - start;
-        const wait = Math.max(SPLASH_MIN_MS - elapsed, 0);
-        setTimeout(hideSplash, wait);
+        const delay = Math.max(MIN_TIME - elapsed, 0);
+        setTimeout(hideSplash, delay);
       };
-      if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        scheduleHideRespectingMin();
-      } else {
-        document.addEventListener('DOMContentLoaded', scheduleHideRespectingMin, {once:true});
-      }
+
+      const logoImg = new Image();
+      logoImg.src = "icons/icon-192.png";
+      logoImg.onload = finish;
+      logoImg.onerror = finish;
+
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(scheduleHideRespectingMin).catch(()=>{});
+        document.fonts.ready.then(finish).catch(finish);
       }
-      window.addEventListener('load', scheduleHideRespectingMin, {once:true});
-      setTimeout(hideSplash, SPLASH_MAX_MS);
-    })();
+
+      setTimeout(hideSplash, MAX_TIME);
+    });
 
     /* ===== PWA service worker ===== */
     if ("serviceWorker" in navigator) {
